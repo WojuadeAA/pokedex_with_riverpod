@@ -47,11 +47,7 @@ class _PokemonCardState extends ConsumerState<PokemonCard> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Container(
-                color: color.when(
-                  data: (data) => data,
-                  error: (error, stackTrace) => Colors.grey[200],
-                  loading: () => Colors.grey[200],
-                ),
+                color: color.asData?.value,
                 width: double.infinity,
                 height: constraints.maxHeight * 0.55,
                 child: Hero(
