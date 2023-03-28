@@ -16,16 +16,44 @@ class LocalFavoritePokemonDataSource extends FavoritePokemonDataSource {
   LocalFavoritePokemonDataSource(this.localStorageClient);
 
   @override
+  Future<List<PokemonDetails>> fetchFavoritePokemons() async {
+    final favoritePokemonsAsString = await getFavouritePokemonList();
+    if (!_listIsAvailableOnCache(favoritePokemonsAsString)) {
+      return <PokemonDetails>[];
+    } else {
+      final favoritePokemons =
+          favoritePokemonsFromJson(favoritePokemonsAsString!);
+      return favoritePokemons.pokemons;
+    }
+  }
+
+  @override
+  Future removeAsFavorite(PokemonDetails pokemon) async {
+    //  to remove as favorite i have to get the list first,
+    final data = await getFavouritePokemonList();
+    // then run a check if the list is availabe
+    final listIsAvailableOnCache = _listIsAvailableOnCache(data);
+    //if list is available then i check through the list to see if pokemon is
+    if (listIsAvailableOnCache && pokemonExistsInList(data!, pokemon)) {
+      final favoritePokemons = favoritePokemonsFromJson(data);
+      favoritePokemons.pokemons
+          .removeWhere((element) => element.id == pokemon.id);
+      return localStorageClient.set(PokedexConstants.favortitePokemonPath,
+          favoritePokemonsToJson(favoritePokemons));
+    }
+    return false;
+  }
+
+  @override
   Future<bool> addFavorite(PokemonDetails pokemon) async {
     final data = await getFavouritePokemonList();
     final listIsAvailableOnCache = _listIsAvailableOnCache(data);
-    final listIsEmpty = _listOnCacheIsEmpty(data);
+    final pokemonDoesNotExistInList = !pokemonExistsInList(data!, pokemon);
     if (!listIsAvailableOnCache) {
-      //save to new list
       FavoritePokemons fav = FavoritePokemons(pokemons: [pokemon]);
       return localStorageClient.set(
           PokedexConstants.favortitePokemonPath, favoritePokemonsToJson(fav));
-    } else if (!listIsEmpty && !pokemonExistsInList(data!, pokemon)) {
+    } else if (pokemonDoesNotExistInList) {
       final newFavoritePokemon = saveToExistingList(data, pokemon);
       return localStorageClient.set(PokedexConstants.favortitePokemonPath,
           favoritePokemonsToJson(newFavoritePokemon));
@@ -58,44 +86,6 @@ class LocalFavoritePokemonDataSource extends FavoritePokemonDataSource {
 
   bool _listIsAvailableOnCache(String? data) {
     return data != null;
-  }
-
-  bool _listOnCacheIsEmpty(String? data) {
-    final listIsAvailableOnCache = _listIsAvailableOnCache(data);
-    if (!listIsAvailableOnCache) {
-      return true;
-    }
-    final favoritePokemons = favoritePokemonsFromJson(data!);
-    return favoritePokemons.pokemons.isEmpty;
-  }
-
-  @override
-  Future<List<PokemonDetails>> fetchFavoritePokemons() async {
-    final favoritePokemonsAsString = await getFavouritePokemonList();
-    if (!_listIsAvailableOnCache(favoritePokemonsAsString)) {
-      return <PokemonDetails>[];
-    } else {
-      final favoritePokemons =
-          favoritePokemonsFromJson(favoritePokemonsAsString!);
-      return favoritePokemons.pokemons;
-    }
-  }
-
-  @override
-  Future removeAsFavorite(PokemonDetails pokemon) async {
-    //  to remove as favorite i have to get the list first,
-    final data = await getFavouritePokemonList();
-    // then run a check if the list is availabe
-    final listIsAvailableOnCache = _listIsAvailableOnCache(data);
-    //if list is available then i check through the list to see if pokemon is
-    if (listIsAvailableOnCache && pokemonExistsInList(data!, pokemon)) {
-      final favoritePokemons = favoritePokemonsFromJson(data);
-      favoritePokemons.pokemons
-          .removeWhere((element) => element.id == pokemon.id);
-      return localStorageClient.set(PokedexConstants.favortitePokemonPath,
-          favoritePokemonsToJson(favoritePokemons));
-    }
-    return false;
   }
 }
 
