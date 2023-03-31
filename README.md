@@ -1,16 +1,27 @@
-# pokedex_with_riverpod
+# Pokedex
 
-A new Flutter project.
+A pokemon app that let's you explore a paginated libarary of pokemons, view their strenghts and save your favorite pokemons to local storage. (Built using flutter riverpod)
 
-## Getting Started
+# Running instructions
 
-This project is a starting point for a Flutter application.
+* step 1 ```flutter pub get```
+* step 2  ```flutter  run```
+Tablet screens
+//
+![Alt text](assets/screenshots/pokedex_tab1.png?raw=true "")
+//
+![Alt text](assets/screenshots/pokedex_tab2.png?raw=true "")
+//
+![Alt text](assets/screenshots/pokedex_tab3.png?raw=true "")
+//
+Phone screens
+//
+![Alt text](assets/screenshots/pokedex.png?raw=true "")
+//
+![Alt text](assets/screenshots/pokedex2.png?raw=true "")
+//
 
-A few resources to get you started if this is your first Flutter project:
+## Author
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Wojuade
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
