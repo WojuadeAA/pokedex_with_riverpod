@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokedex_with_riverpod/data/models/favorite_pokemon.dart';
 import 'package:pokedex_with_riverpod/data/models/pokemon_details.dart';
@@ -78,6 +80,7 @@ class LocalFavoritePokemonDataSource extends FavoritePokemonDataSource {
     final data =
         await localStorageClient.get(PokedexConstants.favortitePokemonPath);
     if (data != null) {
+      print(jsonEncode(data));
       return data.toString();
     } else {
       return null;

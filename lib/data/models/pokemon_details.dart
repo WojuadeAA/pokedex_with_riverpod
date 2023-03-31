@@ -1,4 +1,6 @@
-class PokemonDetails {
+import 'package:equatable/equatable.dart';
+
+class PokemonDetails extends Equatable {
   final int id;
   final String name;
   final int height;
@@ -6,8 +8,8 @@ class PokemonDetails {
   final String imageUrl;
   final List<String> types;
   final List<Stat> stats;
-  bool isFavorite;
-  PokemonDetails({
+  final bool isFavorite;
+  const PokemonDetails({
     required this.id,
     required this.name,
     required this.height,
@@ -66,6 +68,10 @@ class PokemonDetails {
         "stats": List<dynamic>.from(stats.map((x) => x.toJson())),
         "isFavorite": isFavorite,
       };
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [];
 }
 
 class Stat {

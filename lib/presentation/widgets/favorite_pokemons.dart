@@ -20,28 +20,31 @@ class FavoritePokemonsScreen extends StatelessWidget {
         final favoritePokemons = ref.watch(fetchFavoritePokemonsProvider);
         return favoritePokemons.when(
             data: (pokemonList) {
-              return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: sizingInformation.deviceScreenType ==
-                            DeviceScreenType.tablet
-                        ? 4
-                        : 3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio:
-                        getValue(sizingInformation, orientation, mediaQuery)),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                itemCount: pokemonList.length,
-                itemBuilder: (_, index) => GestureDetector(
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) =>
-                          PokemonDetailsScreen(pokemon: pokemonList[index]))),
-                  child: FavoritePokemonCard(
-                    pokemon: pokemonList[index],
-                  ),
-                ),
-              );
+              return pokemonList.isEmpty
+                  ? Container()
+                  : GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: sizingInformation.deviceScreenType ==
+                                  DeviceScreenType.tablet
+                              ? 4
+                              : 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: getValue(
+                              sizingInformation, orientation, mediaQuery)),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 10),
+                      itemCount: pokemonList.length,
+                      itemBuilder: (_, index) => GestureDetector(
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (_) => PokemonDetailsScreen(
+                                    pokemon: pokemonList[index]))),
+                        child: FavoritePokemonCard(
+                          pokemon: pokemonList[index],
+                        ),
+                      ),
+                    );
             },
             error: ((error, stackTrace) => Text(error.toString())),
             loading: () => const Skeleton());
